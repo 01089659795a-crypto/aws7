@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>박스 연습예제</title>
+	<style>
+		/* 
+		block태그들은 너비가 기본값이 100% => 부모 컨텐츠 크기를 가져옴
+		*/
+		.container{height: 130px; width: 300px; border: 3px solid black; }
+		.box:first-of-type{height: 50px; width: 280px; background: red; margin-bottom: 10px;}
+		.box:last-of-type{height: 50px; width: 280px; background: red;}
+		.wrap{border: 1px solid blue; padding: 10px;}
+		/* 
+		>><강사님 풀이>
+		.container{ border: 3px solid black;}
+		.wrap{ padding: 10px;}
+		.box{height:50px; background: red;}
+		.box+.box{ margin-top: 10px;}
+		>> 부모 자식 간에는 padding, 형제끼리는 margin을 사용하는 것이 좋다.
+		*/
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="wrap">
+			<div class="box"></div>
+			<div class="box"></div>
+		</div>
+	</div>
+</body>
+</html>
