@@ -22,3 +22,8 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+.classpath
+.project
+*/.gitignore
+front/css/03_스타일속성/연습예제01_이미지 정렬.html
