@@ -70,7 +70,8 @@ public class Ex04_예외처리 {
 			int num1 = scan.nextInt();
 			System.out.print("정수2 입력 : ");
 			int num2 = scan.nextInt();
-			System.out.println(num1 + " / " + num2 + " = " + num1 / num2);
+			//System.out.println(num1 + " / " + num2 + " = " + num1 / num2);
+			printDivde(num1, num2);
 		}
 		catch (InputMismatchException e) {
 			System.out.println("입력을 잘못해서 예외가 발생했습니다.");
@@ -83,6 +84,11 @@ public class Ex04_예외처리 {
 		}
 			System.out.println("프로그램 종료");
 		
+	}
+	
+	//예외를 처리하지 않고 시킨 곳에서 처리하도록 안내
+	public static void printDivde(int num1, int num2) throws ArithmeticException {
+		System.out.println(num1 + " / " + num2 + " = " + num1 / num2);
 	}
 
 }
