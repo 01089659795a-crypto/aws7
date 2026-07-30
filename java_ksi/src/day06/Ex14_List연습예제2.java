@@ -32,5 +32,21 @@ public class Ex14_List연습예제2 {
 			//list에 있는 값을 콘솔에 출력
 			System.out.println(list);
 	}
+	public static ArrayList<Integer> inputNums(int size, int min, int max) {
+		//ArrayList 생성(정수)
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		
+		Scanner scan = new Scanner(System.in);
+		//반복 : 리스트에 3개가 저장될때까지
+		for( ; list.size() < size ; ) {
+			//정수를 입력 받음
+			int num = scan.nextInt();
+			//입력받은 정수가 리스트에 없으면 추가
+			if(!list.contains(num)) {
+				list.add(num);			
+			}
+		}
+		return list;
+	}
 
 }
