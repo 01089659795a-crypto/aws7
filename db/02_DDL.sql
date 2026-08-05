@@ -66,7 +66,14 @@ create table if not exists major(
 );
 
 # 제약조건 추가
-# alter table 테이블명 add contraint 제약조건명(컬럼명)
+# 	- 추가할 제약 조건이 FK일때
+# 		alter table 테이블명 add contraint 제약조건명 제약조건종류(컬럼명);
+# 	- 예시 (PK): ALTER TABLE student ADD CONSTRAINT pk_student PRIMARY KEY (num);
+#	- 예시 (UNIQUE): ALTER TABLE student ADD CONSTRAINT uq_contact UNIQUE (contact);
+
+# 	- 추가할 제약 조건이 FK외의 다른 조건일때
+# 	alter table 테이블명 add constraint 제약조건명
+#		foreign key(제한대상컬럼명) references 참조테이블명(참조컬럼명);
 alter table student add constraint fk_student_major
 	foreign key(major_code) references major(code);
     
