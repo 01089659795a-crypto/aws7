@@ -1,3 +1,5 @@
+# 물리 설계
+# ERD CLOUD : https://www.erdcloud.com/d/5Z4yoFSsnmzGAnNPB
 DROP DATABASE IF EXISTS SHOPPINGMALL;
 CREATE DATABASE SHOPPINGMALL;
 USE SHOPPINGMALL;
@@ -6,30 +8,30 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
 	`id`	varchar(13)	NOT NULL,
-	`pw`	varchar(255)	NULL,
-	`email`	varchar(50)	NULL,
-	`phone`	varchar(13)	NULL,
-	`state`	varchar(5)	NULL,
-	`authority`	varchar(5)	NULL,
-	`login_count`	int	NULL
+	`pw`	varchar(255)	NOT NULL,
+	`email`	varchar(50)	NOT NULL UNIQUE,
+	`phone`	varchar(13)	NOT NULL UNIQUE,
+	`state`	varchar(5)	NOT NULL DEFAULT '이용',
+	`authority`	varchar(5)	NOT NULL DEFAULT 'USER',
+	`login_count`	int	NOT NULL DEFAULT 0
 );
 
 DROP TABLE IF EXISTS `category`;
 
 CREATE TABLE `category` (
 	`code`	char(3)	NOT NULL,
-	`name`	varchar(10)	NULL
+	`name`	varchar(10)	NOT NULL
 );
 
 DROP TABLE IF EXISTS `product`;
 
 CREATE TABLE `product` (
 	`code`	char(6)	NOT NULL,
-	`name`	varchar(100)	NULL,
-	`content`	text	NULL,
-	`price`	int	NULL,
+	`name`	varchar(100)	NOT NULL,
+	`content`	text	NOT NULL,
+	`price`	int	NOT NULL DEFAULT 0,
 	`thumbnail`	varchar(255)	NULL,
-	`amount`	int	NULL,
+	`amount`	int	NOT NULL DEFAULT 0,
 	`ca_code`	char(3)	NOT NULL
 );
 
@@ -38,16 +40,16 @@ DROP TABLE IF EXISTS `buy`;
 CREATE TABLE `buy` (
 	`id`	varchar(13)	NOT NULL,
 	`code`	char(6)	NOT NULL,
-	`amount`	int	NULL,
-	`date`	datetime	NULL,
-	`state`	varchar(10)	NULL
+	`amount`	int	NOT NULL,
+	`date`	datetime	NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`state`	varchar(10)	NOT NULL DEFAULT '결제완료'
 );
 
 DROP TABLE IF EXISTS `cart`;
 
 CREATE TABLE `cart` (
 	`num`	int	PRIMARY KEY AUTO_INCREMENT,
-	`amount`	int	NULL,
+	`amount`	int	NOT NULL,
 	`id`	varchar(13)	NOT NULL,
 	`code`	char(6)	NOT NULL
 );
