@@ -2,11 +2,11 @@ package kr.fast.boot.service;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.fast.boot.dto.BoardDTO;
+import kr.fast.boot.dto.BoardResponse;
 import kr.fast.boot.entity.Board;
 import kr.fast.boot.repository.BoardRepository;
 import lombok.AllArgsConstructor;
@@ -20,14 +20,14 @@ public class BoardService {
 
 	@Transactional
 	public boolean insertBoard(BoardDTO dto) {
-		// 게시판 이름이 null이거나 빈 문자열이면 false를 리턴
-		if(dto == null || dto.name() == null || dto.name().trim().length() == 0 )	 {
+		//게시판 이름이 null이거나 빈 문자열이면 false를 리턴
+		if(dto == null || dto.name() == null || dto.name().trim().length() == 0 ) {
 			throw new IllegalArgumentException("게시판명이 잘못됐습니다.");
 		}
 		
 		//레포지토리야. 게시판명이 중복되는지 알려줘. 게시판명을 줄테니
 		boolean isExists = boardRepository.existsByName(dto.name());
-
+		
 		if(isExists) {
 			throw new IllegalArgumentException("이미 등록된 게시판입니다.");
 		}
@@ -42,22 +42,24 @@ public class BoardService {
 	@Transactional
 	public void updateBoard(BoardDTO board) {
 		//레포야 id로 게시판 가져와
-		//게시판 = 레포, 게시판 가져와(id)
-		Board selectedBoard = boardRepository.findById(board.id())
-			.orElseThrow(()-> new IllegalArgumentException("게시판이 존재하지 않습니다."));
+		//게시판 = 레포.게시판가져와(id)
+		Board selectedBoard 
+			= boardRepository.findById(board.id())
+				.orElseThrow(()-> new IllegalArgumentException("게시판이 존재하지 않습니다."));
+		
 		//바꾸려는 게시판명이 이미 있는 경우를 처리
 		boolean isExsist = boardRepository.existsByIdNotAndName(board.id(), board.name());
 		if(isExsist) {
 			throw new IllegalArgumentException("이미 존재하는 게시판입니다.");
 		}
 		
-		//기존 게시판명과 동일한 경우
+		//기존 게시판명과 동일한 경우 
 		if(selectedBoard.getName().equals(board.name())) {
 			throw new IllegalArgumentException("수정할 게시판명을 입력하세요.");
 		}
 		selectedBoard.update(board.name());
 	}
-	
+
 	@Transactional
 	public List<Board> getBoardList() {
 		//레포야 게시판 목록 가져와
@@ -67,19 +69,14 @@ public class BoardService {
 	@Transactional
 	public void deleteBoard(Integer id) {
 		
-		//레포에게 id주면서 게시판 가져오라고 요청
-		Board selectedBoard = boardRepository.findById(id)
+		//레포에게 id 주면서 게시판 가져오라고 요청 
+		Board selectedBoard 
+		= boardRepository.findById(id)
 			.orElseThrow(()-> new IllegalArgumentException("게시판이 존재하지 않습니다."));
 		//게시판 삭제
 		boardRepository.delete(selectedBoard);
 	}
 
+	
 
 }
-
-
-
-
-
-
-
