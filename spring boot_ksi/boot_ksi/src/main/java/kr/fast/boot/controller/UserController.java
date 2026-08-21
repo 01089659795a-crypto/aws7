@@ -42,7 +42,7 @@ public class UserController {
 			userService.signup(dto);
 			return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입에 성공했습니다.");
 		}catch(Exception e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());		
 		}
 	}
 }
