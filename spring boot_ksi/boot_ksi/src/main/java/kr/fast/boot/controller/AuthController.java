@@ -1,7 +1,11 @@
 package kr.fast.boot.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,10 +37,12 @@ public class AuthController {
 		}
 	}
 	@GetMapping("/me")
-	public ResponseEntity<Object> meGet(){
+	public ResponseEntity<Object> meGet(@AuthenticationPrincipal String username){
 		log.info("회원 정보를 가져오는 중입니다.");
 		try {
-			return ResponseEntity.ok("OK");
+			Map<String, Object> map= new HashMap<String, Object>();
+			map.put("username", username);
+			return ResponseEntity.ok(map);
 		}catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 		}
