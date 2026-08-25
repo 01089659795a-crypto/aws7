@@ -19,12 +19,13 @@ async function getMyInfo(){
 		if(response.status === 401 || response.status === 403){
 			console.log("인증이 만료되거나 권한이 없습니다.");
 			localStorage.removeItem("accessToken");
-			return;
+			return null;
 		}
 		
 		const result = await response.json();
-		console.log(result);
+		return result;
 	}catch(e){
 		console.error(e);
+		return null;
 	}
 }
