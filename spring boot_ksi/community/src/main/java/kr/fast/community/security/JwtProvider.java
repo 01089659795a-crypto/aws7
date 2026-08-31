@@ -37,6 +37,7 @@ public class JwtProvider{
                 .subject(username)
                 //.claim("nickname", nickname)
                 //.claim("email", email)
+                .claim("role", role)
                 .issuedAt(now)
                 .expiration(validity)
                 .signWith(key)
