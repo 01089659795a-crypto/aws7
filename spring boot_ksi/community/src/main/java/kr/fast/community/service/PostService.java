@@ -2,6 +2,7 @@ package kr.fast.community.service;
 
 import java.util.List;
 
+import kr.fast.community.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import kr.fast.community.dto.MessageResponse;
 import kr.fast.community.dto.PageResponse;
 import kr.fast.community.dto.PostRequest;
 import kr.fast.community.entity.Board;
+import kr.fast.community.entity.Comment;
 import kr.fast.community.entity.File;
 import kr.fast.community.entity.Post;
 import kr.fast.community.repository.BoardRepository;
@@ -28,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostService {
 	
+	private final CommentRepository commentRepository;
 	private final PostRepository postRepository;
 	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
@@ -35,6 +38,7 @@ public class PostService {
 		
 	@Value("${file.path}")
 	private String uploadFilePath;
+
 	
 	@PostConstruct //의존성 주입 완료 후 실행
 	public void init() {
@@ -135,18 +139,27 @@ public class PostService {
 				.orElseThrow(()->new RuntimeException("게시글이 존재하지 않습니다."));
 		
 		if(post == null || post.getIsDeleted().equals("Y")) {
-			throw new RuntimeException("게시글이 존재하지 않습니다.");
+			return new MessageResponse(false, "게시글이 존재하지 않습니다.");
 		}
 		// 사용자 확인(로그인 했는지 안했는지)
 		if(userDetails == null || userDetails.getUsername().isEmpty()) {
-			throw new RuntimeException("로그인이 필요한 서비스입니다.");
+			return new MessageResponse(false, "로그인이 필요한 서비스입니다.");
 		}
 		//댓글 내용 확인
 		if(request == null || request.content() == null || request.content().isBlank()) {
-			throw new RuntimeException("댓글을 입력하세요.");
+			return new MessageResponse(false, "댓글을 입력하세요.");
 		}
 		//댓글 등록
-		return null;
+		//1. 엔티티 생성
+		Comment comment = 
+				new Comment(
+						request.content(), //댓글내용
+						post.getId(), //게시글번호
+						userDetails.getUsername(), //작성자
+						null); //대댓여부. null : 댓글, null이 아니면 대댓
+		//2. 저장
+		commentRepository.save(comment);
+		return new MessageResponse(true, "댓글을 등록했습니다.");
 	}
 	
 }
