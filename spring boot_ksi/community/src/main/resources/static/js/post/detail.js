@@ -3,6 +3,7 @@ DOM 트리 구성이 완료되면 실행
 ======================== */ 
 document.addEventListener("DOMContentLoaded", e=>{
    getPost();
+   getComments();
 });
 
 /* ========================
@@ -85,7 +86,7 @@ function visibleButtons(visible){
 async function sendComment(e){
    e.preventDefault();
    
-   //서버에 보낼 정보를 만듬
+   //서버에 보낼 정보를 만듦
    const formData = new FormData(e.target);
    const data = Object.fromEntries(formData);
 
@@ -122,8 +123,46 @@ async function sendComment(e){
    }
    
 }
+async function getComments(){
 
-
-
-
-
+		//댓글 목록 요청
+		try{
+			const urlParams = new URLSearchParams(location.search);
+		    const 게시글번호 = urlParams.get("num");
+		    const response = await fetch(`/api/posts/${게시글번호}/comments`);
+		      
+		    if(!response.ok){
+		       return;
+		    }
+		    const result = await response.json();
+		    	console.log(result);
+		    //댓글 목록 화면에 출력
+		    displayComments(result);
+		}catch(e){
+		    console.error(e);
+		}
+		
+}
+function displayComments(comments){
+	let html = '';
+	comments.forEach(댓글=>{
+		if(댓글.id == 댓글.originId){
+			html += `
+				<li class="list-group-item p-3">`;
+		}else{
+			html += ` <li class="list-group-item p-3 ms-4 bg-light border-start border-3 border-primary">`
+		}
+		html += `
+			      <div class="d-flex justify-content-between align-items-center mb-1">
+			        <span class="fw-bold">${댓글.memberId}</span>
+			        <small class="text-muted">${댓글.createdAt.replace("T", " ")}</small>
+			      </div>
+			      <p class="mb-0 text-secondary">
+				 	${댓글.content}
+			      </p>
+			    </li>		
+			`;
+	})
+	const 댓글목록 = document.querySelector("#comment-box");
+	댓글목록.innerHTML = html;
+}

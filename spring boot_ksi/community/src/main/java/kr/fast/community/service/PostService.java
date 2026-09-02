@@ -161,5 +161,16 @@ public class PostService {
 		commentRepository.save(comment);
 		return new MessageResponse(true, "댓글을 등록했습니다.");
 	}
+
+	public List<Comment> getComments(int postId) {
+		// 게시글이 있는지 확인
+		Post post = postRepository.findByIdAndIsDeleted(postId, "N");
+		System.out.println(post);
+		if(post == null) {
+			throw new RuntimeException("존재하지 않은 게시글입니다.");
+		}
+		
+		return commentRepository.findAllByPostId(postId); //포스트기준으로 모든 댓글 가져와
+	}
 	
 }
