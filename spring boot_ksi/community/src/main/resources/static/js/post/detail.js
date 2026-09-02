@@ -215,5 +215,5 @@ function changePage(page){
 }
 
 const data = {
-	page : 1
+	page : 0
 }
